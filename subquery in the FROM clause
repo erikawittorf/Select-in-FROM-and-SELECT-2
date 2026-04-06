@@ -1,22 +1,5 @@
 --Bookmark question for later
-For each sale with non-zero tax, list the saleID and saledate, tax, shipping, the total amount of the sale (all saleitems), and the sum of the tax plus shipping plus total from saleitems. Total amount of the sale is the quantity * saleprice from each saleitem and totaled for the entire sale. Do this using a subquery in the FROM clause. Show sales for February 2015. Name the total for each sale "SaleTotal". Round your SaleTotal to 2 decimal places.
-SELECT
-    s.SaleID,
-    s.SaleDate,
-    s.Tax,
-    s.Shipping,
-    ROUND(si.SaleTotal, 2) AS SaleTotal,
-    ROUND(s.Tax + s.Shipping + si.SaleTotal, 2) AS GrandTotal
-FROM Sale s
-JOIN (
-    SELECT 
-        SaleID,
-        SUM(Quantity * SalePrice) AS SaleTotal
-    FROM SaleItem
-    GROUP BY SaleID
-) si
-    ON s.SaleID = si.SaleID
-WHERE s.Tax <> 0
-  AND s.SaleDate >= '2015-02-01'
-  AND s.SaleDate < '2015-03-01';
-``
+Select S.SaleID, SaleDate, Tax, Shipping, TotalItemAmt, Round((TotalItemAmt + Tax + Shipping),2) as SaleTotal
+From Sale S join (Select SaleID, Sum(saleprice * quantity) as totalItemAmt from SaleItem group by saleid) Sumt
+on S.SaleID = Sumt.SaleID where Tax <> 0 and Month(saledate) = 2 and Year(saledate)=2015
+
