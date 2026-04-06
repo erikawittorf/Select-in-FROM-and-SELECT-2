@@ -1,0 +1,13 @@
+SELECT
+    ROUND(AVG(SaleTotal), 2) AS SaleAverage
+FROM (
+    SELECT 
+        s.SaleID,
+        SUM(si.Quantity * si.SalePrice) AS SaleTotal
+    FROM Sale s
+    JOIN SaleItem si
+        ON s.SaleID = si.SaleID
+    WHERE s.SaleDate >= '2015-01-01'
+      AND s.SaleDate < '2016-01-01'
+    GROUP BY s.SaleID
+) SaleTotals;
